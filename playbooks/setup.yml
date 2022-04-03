@@ -1,0 +1,80 @@
+---
+
+- hosts: all
+  tasks:
+    - ansible.builtin.setup:
+      register: setup
+    - ansible.builtin.debug: var=setup
+
+    - name: Get user's SHELL
+      command: /usr/bin/printenv SHELL
+      register: user_shell
+      changed_when: false
+    - name: Get user's SHELL
+      set_fact:
+        shell: "{{ user_shell.stdout }}"
+
+    # Normalize the PATH for predictable playbook runs across local and ssh connections.
+    # * For ssh connections:
+    #   Ansible executes its remote commands in a non-login and non-interactive shell,
+    #   which has the effect that `/etc/profile` and `~/.bash_profile` (or `~/.zprofile`) are not sourced.
+    #   To resolve this, we create a new login shell.
+    # * For local connections:
+    #   Environment variables are inherited from the user's existing session,
+    #   but they inherit unwanted PATH modifications (e.g. made through virtual environments and `~/.bashrc` (or `~/.zshrc`)).
+    #   To resolve this, we clear any inherited env vars prior to creating a new login shell.
+    - name: Get user's PATH
+      command: /usr/bin/env -i HOME="$HOME" {{ shell }} -l -c '/usr/bin/printenv PATH'
+      register: user_path
+      changed_when: false
+    - name: Get user's PATH
+      set_fact:
+        path: "{{ user_path.stdout }}"
+
+    # Local connections set the interpreter to the same one used by the Ansible controller via the localhost inventory plugin.
+    # For remote connections, find the python interpreter from our PATH (playbooks should use the normalized PATH above).
+    - name: Set ansible_python_interpreter
+      set_fact:
+        ansible_python_interpreter: "/usr/bin/env python3"
+      when: ansible_connection != 'local'
+
+    # Only do this if not using a real inventory.
+    - block:
+        - include_vars:
+            dir: "{{ playbook_dir }}/group_vars/all"
+          no_log: true
+
+        - include_vars:
+            dir: "{{ playbook_dir }}/group_vars/macos"
+          no_log: true
+          when: ansible_distribution == 'MacOSX'
+        - include_vars:
+            dir: "{{ playbook_dir }}/group_vars/ubuntu"
+          no_log: true
+          when: ansible_distribution == 'Ubuntu'
+
+        - include_vars:
+            file: "{{ playbook_dir }}/group_vars/{{ target }}.yml"
+          no_log: true
+          when: target is defined
+
+        - name: Set macos parent group
+          set_fact:
+            parent_group: macos
+          when: ansible_distribution == 'MacOSX'
+        - name: Set ubuntu parent group
+          set_fact:
+            parent_group: ubuntu
+          when: ansible_distribution == 'Ubuntu'
+
+        - name: Create dynamic group
+          group_by:
+            key: "{{ ansible_user_id }}"
+            parents:
+              - "{{ parent_group }}"
+              - default
+      when: "'ungrouped' in group_names"
+
+    - name: Show host group names
+      debug: var=group_names
+  tags: always
