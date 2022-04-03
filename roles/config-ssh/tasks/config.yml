@@ -1,0 +1,40 @@
+---
+
+- set_fact:
+    ssh_config_path: "config.d/{{ config.filename }}"
+  when: config.filename is defined
+- set_fact:
+    ssh_config_path: "config"
+  when: config.filename is not defined
+
+- name: Add ssh configs
+  blockinfile:
+    path: "{{ ansible_user_dir }}/.ssh/{{ ssh_config_path }}"
+    marker: "# {mark} {{ config.block_marker_qualifier | default('DEFAULT') }} HOSTS BLOCK"
+    insertafter: EOF
+    create: yes
+    block: |
+      {% for cfg in config.stanzas %}
+      {% if cfg.comment | default(false) %}
+      # {{ cfg.comment }}
+      {% endif %}
+      {% if cfg.Host | default(false) %}
+      Host {{ cfg.Host }}
+      {# Indent configs within a Host stanza. #}
+      {% for key, value in cfg.items() %}
+      {% if key != 'comment' and key != 'Host' and (key != 'UseKeychain' or ansible_distribution == 'MacOSX') %}
+          {{ key }} {{ value }}
+      {% endif %}
+      {% endfor %}
+      {% else %}
+      {# Configs without a Host stanza. #}
+      {% for key, value in cfg.items() %}
+      {% if key != 'comment' and (key != 'UseKeychain' or ansible_distribution == 'MacOSX') %}
+      {{ key }} {{ value }}
+      {% endif %}
+      {% endfor %}
+      {% endif %}
+      {% if not loop.last %}
+
+      {% endif %}
+      {% endfor %}

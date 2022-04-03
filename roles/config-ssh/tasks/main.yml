@@ -1,0 +1,32 @@
+---
+
+- name: Create SSH directory
+  file:
+    path: "{{ ansible_user_dir }}/.ssh"
+    state: directory
+    mode: 0700
+
+- name: Create SSH config.d directory
+  file:
+    path: "{{ ansible_user_dir }}/.ssh/config.d"
+    state: directory
+
+- name: Configure ~/.ssh/config
+  template:
+    src: config.j2
+    dest: "{{ ansible_user_dir }}/.ssh/config"
+  when: initialize | bool
+
+- name: Make sure ~/.ssh/config includes config.d directory
+  lineinfile:
+    path: "{{ ansible_user_dir }}/.ssh/config"
+    insertbefore: BOF
+    create: yes
+    line: Include config.d/*
+
+- name: Run ssh configs
+  include_tasks: config.yml
+  with_items: "{{ configs }}"
+  loop_control:
+    loop_var: config
+  when: configs is defined
