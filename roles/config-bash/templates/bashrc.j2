@@ -1,0 +1,26 @@
+{# https://mywiki.wooledge.org/DotFiles #}
+# If not running interactively, don't do anything.
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+
+HISTSIZE=100000
+HISTFILESIZE=$HISTSIZE
+
+# Store history immediately instead of only when the session terminates.
+PROMPT_COMMAND='history -a'
+
+# Start Ansible Managed Blocks
+# End Ansible Managed Blocks
+
+# BEGIN USER SPECIFIC ALIASES AND FUNCTIONS
+if [ -d ~/{{ user_shrc_dir }} ]; then
+    for rc in ~/{{ user_shrc_dir }}/*; do
+        if [ -f "$rc" ]; then
+            source "$rc"
+        fi
+    done
+fi
+unset rc
+# END USER SPECIFIC ALIASES AND FUNCTIONS

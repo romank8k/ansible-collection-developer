@@ -1,0 +1,57 @@
+---
+
+- name: Set user managed scripts dir
+  set_fact:
+    user_shrc_dir: .bashrc.d
+
+- name: Create {{ user_shrc_dir }} directory
+  file:
+    path: "{{ ansible_user_dir }}/{{ user_shrc_dir }}"
+    state: directory
+
+- name: Initialize ~/.bash_profile
+  template:
+    src: bash_profile.j2
+    dest: "{{ ansible_user_dir }}/.bash_profile"
+  when: initialize | bool
+
+- name: Initialize ~/.bashrc
+  template:
+    src: bashrc.j2
+    dest: "{{ ansible_user_dir }}/.bashrc"
+  when: initialize | bool
+
+- name: Make sure ~/.bashrc loads user-managed scripts
+  blockinfile:
+    path: "{{ ansible_user_dir }}/.bashrc"
+    marker: "# {mark} USER SPECIFIC ALIASES AND FUNCTIONS"
+    create: yes
+    block: |
+      if [ -d ~/{{ user_shrc_dir }} ]; then
+          for rc in ~/{{ user_shrc_dir }}/*; do
+              if [ -f "$rc" ]; then
+                  source "$rc"
+              fi
+          done
+      fi
+      unset rc
+
+- name: Run .bash_profile config roles
+  include_tasks: config.yml
+  vars:
+    sh_shell: bash
+    sh_config_file: .bash_profile
+  with_items: "{{ config_bash_profile_roles }}"
+  loop_control:
+    loop_var: config
+  when: initialize | bool and config_bash_profile_roles is defined
+
+- name: Run .bashrc config roles
+  include_tasks: config.yml
+  vars:
+    sh_shell: bash
+    sh_config_file: .bashrc
+  with_items: "{{ config_bash_rc_roles }}"
+  loop_control:
+    loop_var: config
+  when: initialize | bool and config_bash_rc_roles is defined

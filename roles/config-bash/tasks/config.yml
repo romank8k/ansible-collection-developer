@@ -1,0 +1,8 @@
+---
+
+- name: Run bash config role {{ config.role }}
+  include_role:
+    name: "{{ config.role }}"
+  vars:
+    role_vars: "{{ config.vars }}"
+  when: config.role is defined and config.role != None
