@@ -13,6 +13,7 @@
     - name: Get user's SHELL
       set_fact:
         shell: "{{ user_shell.stdout }}"
+        shell_name: "{{ user_shell.stdout | split('/') | last }}"
 
     # Normalize the PATH for predictable playbook runs across local and ssh connections.
     # * For ssh connections:
@@ -37,43 +38,6 @@
       set_fact:
         ansible_python_interpreter: "/usr/bin/env python3"
       when: ansible_connection != 'local'
-
-    # Only do this if not using a real inventory.
-    - block:
-        - include_vars:
-            dir: "{{ playbook_dir }}/group_vars/all"
-          no_log: true
-
-        - include_vars:
-            dir: "{{ playbook_dir }}/group_vars/macos"
-          no_log: true
-          when: ansible_distribution == 'MacOSX'
-        - include_vars:
-            dir: "{{ playbook_dir }}/group_vars/ubuntu"
-          no_log: true
-          when: ansible_distribution == 'Ubuntu'
-
-        - include_vars:
-            file: "{{ playbook_dir }}/group_vars/{{ target }}.yml"
-          no_log: true
-          when: target is defined
-
-        - name: Set macos parent group
-          set_fact:
-            parent_group: macos
-          when: ansible_distribution == 'MacOSX'
-        - name: Set ubuntu parent group
-          set_fact:
-            parent_group: ubuntu
-          when: ansible_distribution == 'Ubuntu'
-
-        - name: Create dynamic group
-          group_by:
-            key: "{{ ansible_user_id }}"
-            parents:
-              - "{{ parent_group }}"
-              - default
-      when: "'ungrouped' in group_names"
 
     - name: Show host group names
       debug: var=group_names
