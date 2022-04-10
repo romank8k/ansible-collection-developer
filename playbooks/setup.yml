@@ -38,7 +38,4 @@
       set_fact:
         ansible_python_interpreter: "/usr/bin/env python3"
       when: ansible_connection != 'local'
-
-    - name: Show host group names
-      debug: var=group_names
   tags: always
