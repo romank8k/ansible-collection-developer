@@ -1,0 +1,35 @@
+---
+
+- import_playbook: setup.yml
+
+- hosts: default
+  environment:
+    PATH: "{{ path | default(ansible_env.PATH) }}"
+  pre_tasks:
+    - name: Install Homebrew formulae
+      community.general.homebrew:
+        name:
+          - bash
+          - bash-completion@2
+        path: "{{ homebrew_prefix }}/bin"
+
+    # In Linuxbrew, bash-completion@2 is keg-only for some reason.
+    - name: Link Homebrew formulae
+      community.general.homebrew:
+        state: linked
+        name:
+          - bash-completion@2
+        path: "{{ homebrew_prefix }}/bin"
+
+    - name: Whitelist new system shell
+      lineinfile:
+        dest: "/etc/shells"
+        line: "{{ homebrew_prefix }}/bin/bash"
+      become: true
+
+    - name: Change system shell for user ({{ ansible_env.USER }})
+      command: chsh -s {{ homebrew_prefix }}/bin/bash {{ ansible_env.USER }}
+      become: true
+  roles:
+    - role: config-bash
+      tags: config-bash
