@@ -1,0 +1,35 @@
+---
+
+- import_playbook: setup.yml
+
+- hosts: default
+  environment:
+    PATH: "{{ path | default(ansible_env.PATH) }}"
+  pre_tasks:
+    - name: Install Homebrew formula
+      community.general.homebrew:
+        name: zsh
+        path: "{{ homebrew_prefix }}/bin"
+
+    - name: Whitelist new system shell
+      lineinfile:
+        dest: "/etc/shells"
+        line: "{{ homebrew_prefix }}/bin/zsh"
+      become: true
+
+    - name: Change system shell for user ({{ ansible_env.USER }})
+      command: chsh -s {{ homebrew_prefix }}/bin/zsh {{ ansible_env.USER }}
+      become: true
+
+    # Fix the following warning caused by group-writeable completion directories.
+    # `zsh compinit: insecure directories, run compaudit for list.`
+    - name: Fix completion directory permissions
+      ansible.builtin.file:
+        path: "{{ item }}"
+        mode: "0755"
+      with_items:
+        - /usr/local/share/zsh
+        - /usr/local/share/zsh/site-functions
+  roles:
+    - role: config-zsh
+      tags: config-zsh
