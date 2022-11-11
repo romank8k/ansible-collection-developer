@@ -1,0 +1,4 @@
+---
+
+- name: Install Python package needed by Ansible's 'expect' module
+  command: "{{ ansible_python_interpreter }} -m pip install pexpect"
