@@ -1,0 +1,11 @@
+---
+
+- name: Run bash config role
+  include_role:
+    name: config-bash
+  when: shell_name == 'bash'
+
+- name: Run zsh config role
+  include_role:
+    name: config-zsh
+  when: shell_name == 'zsh'
