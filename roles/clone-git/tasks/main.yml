@@ -1,0 +1,18 @@
+---
+
+- name: Create repository root directory
+  file:
+    path: "{{ repository_root }}"
+    state: directory
+
+- name: Register cloned Git repositories
+  shell: ls {{ repository_root }}
+  register: cloned_repositories
+  changed_when: false
+
+- name: Clone Git repositories
+  include_tasks: clone.yml
+  with_items: "{{ repositories }}"
+  loop_control:
+    loop_var: repository
+  when: repository.name not in cloned_repositories.stdout_lines

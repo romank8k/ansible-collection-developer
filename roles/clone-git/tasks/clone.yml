@@ -1,0 +1,48 @@
+---
+
+# $SSH_AUTH_SOCK is inherited by login shells...which Ansible does not create...so we create a new ssh-agent instead.
+- name: Create a new ssh-agent for Git repository - {{ repository.name }} - {{ repository.url }}
+  shell: eval $(ssh-agent) > /dev/null && echo $SSH_AUTH_SOCK && echo $SSH_AGENT_PID
+  register: ssh_agent
+  when: repository.identity_file is defined
+
+- name: Add the ssh key to ssh-agent for Git repository - {{ repository.name }} - {{ repository.url }}
+  expect:
+    command: ssh-add {{ repository.identity_file }}
+    responses:
+      passphrase:
+        - "{{ repository.ssh_key_phrase | default(omit) }}"
+  environment:
+    SSH_AUTH_SOCK: "{{ ssh_agent.stdout_lines[0] }}"
+  when: ssh_agent is not skipped and repository.ssh_key_phrase is defined and repository.ssh_key_phrase != ''
+
+- name: Define ssh_auth_sock
+  set_fact:
+    ssh_auth_sock: "{{ ssh_agent.stdout_lines[0] }}"
+  when: ssh_agent is not skipped
+
+- name: Clone Git repository - {{ repository.name }} - {{ repository.url }}
+  git:
+    repo: "{{ repository.url }}"
+    dest: "{{ repository_root }}/{{ repository.name }}"
+    version: "{{ repository.version | default(omit) }}"
+    accept_hostkey: yes
+    update: no
+  environment:
+    SSH_AUTH_SOCK: "{{ ssh_auth_sock | default('') }}"
+
+- name: Stop ssh-agent
+  command: kill {{ ssh_agent.stdout_lines[1] }}
+  when: ssh_agent is not skipped
+
+- name: Set the author name for Git repository - {{ repository.name }} - {{ repository.url }}
+  command: git config user.name '{{ repository.author.name }}'
+  args:
+    chdir: "{{ repository_root }}/{{ repository.name }}"
+  when: repository.author is defined and repository.author.name is defined
+
+- name: Set the author email for Git repository - {{ repository.name }} - {{ repository.url }}
+  command: git config user.email '{{ repository.author.email }}'
+  args:
+    chdir: "{{ repository_root }}/{{ repository.name }}"
+  when: repository.author is defined and repository.author.email is defined
