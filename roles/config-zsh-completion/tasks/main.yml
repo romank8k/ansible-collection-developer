@@ -1,0 +1,14 @@
+---
+
+- name: Add zsh completion .zshrc config
+  blockinfile:
+    path: "{{ ansible_user_dir }}/.zshrc"
+    marker: "# {mark} ZSH_COMPLETION BLOCK"
+    insertafter: "# Start Ansible Managed Blocks"
+    block: |
+      if [[ -o interactive ]]; then
+        FPATH={{ homebrew_prefix }}/share/zsh/site-functions:$FPATH
+
+        autoload -Uz compinit
+        compinit
+      fi
