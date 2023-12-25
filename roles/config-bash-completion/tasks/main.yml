@@ -1,0 +1,12 @@
+---
+
+- name: Add bash completion .bashrc config
+  blockinfile:
+    path: "{{ ansible_user_dir }}/.bashrc"
+    marker: "# {mark} BASH_COMPLETION BLOCK"
+    insertafter: "# Start Ansible Managed Blocks"
+    block: |
+      if [[ -r "{{ homebrew_prefix }}/etc/profile.d/bash_completion.sh" ]];
+      then
+        source "{{ homebrew_prefix }}/etc/profile.d/bash_completion.sh"
+      fi
