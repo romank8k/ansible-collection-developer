@@ -2,11 +2,17 @@
 
 - name: Set user managed scripts dir
   set_fact:
+    user_sh_profile_dir: .profile.d
     user_sh_rc_dir: .bashrc.d
 
 - name: Create {{ user_sh_rc_dir }} directory
   file:
     path: "{{ ansible_user_dir }}/{{ user_sh_rc_dir }}"
+    state: directory
+
+- name: Create {{ user_sh_profile_dir }} directory
+  file:
+    path: "{{ ansible_user_dir }}/{{ user_sh_profile_dir }}"
     state: directory
 
 - name: Initialize ~/.bash_profile
@@ -20,6 +26,21 @@
     src: bashrc.j2
     dest: "{{ ansible_user_dir }}/.bashrc"
   when: initialize | bool
+
+- name: Make sure ~/.bash_profile loads user-managed scripts
+  blockinfile:
+    path: "{{ ansible_user_dir }}/.bash_profile"
+    marker: "# {mark} USER SPECIFIC ALIASES AND FUNCTIONS"
+    create: yes
+    block: |
+      if [ -d ~/{{ user_sh_profile_dir }} ]; then
+          for profile in ~/{{ user_sh_profile_dir }}/*; do
+              if [ -f "$profile" ]; then
+                  source "$profile"
+              fi
+          done
+      fi
+      unset profile
 
 - name: Make sure ~/.bashrc loads user-managed scripts
   blockinfile:
