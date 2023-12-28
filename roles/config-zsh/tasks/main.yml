@@ -2,11 +2,11 @@
 
 - name: Set user managed scripts dir
   set_fact:
-    user_shrc_dir: .zshrc.d
+    user_sh_rc_dir: .zshrc.d
 
-- name: Create {{ user_shrc_dir }} directory
+- name: Create {{ user_sh_rc_dir }} directory
   file:
-    path: "{{ ansible_user_dir }}/{{ user_shrc_dir }}"
+    path: "{{ ansible_user_dir }}/{{ user_sh_rc_dir }}"
     state: directory
 
 - name: Initialize ~/.zprofile
@@ -27,8 +27,8 @@
     marker: "# {mark} USER SPECIFIC ALIASES AND FUNCTIONS"
     create: yes
     block: |
-      if [ -d ~/{{ user_shrc_dir }} ]; then
-          for rc in ~/{{ user_shrc_dir }}/*(N); do
+      if [ -d ~/{{ user_sh_rc_dir }} ]; then
+          for rc in ~/{{ user_sh_rc_dir }}/*(N); do
               if [ -f "$rc" ]; then
                   source "$rc"
               fi
