@@ -1,0 +1,10 @@
+---
+
+- name: Configure exports
+  include_tasks: exports.yml
+  vars:
+    name: "{{ config.name }}"
+    exports: "{{ config.exports }}"
+  with_items: "{{ sh_exports }}"
+  loop_control:
+    loop_var: config

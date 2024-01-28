@@ -57,6 +57,14 @@
       fi
       unset rc
 
+- name: Run .profile.d exports role
+  include_role:
+    name: config-sh-exports
+  vars:
+    sh_shell: bash
+    sh_exports: "{{ config_bash_exports }}"
+  when: config_bash_exports is defined
+
 - name: Run .bash_profile config roles
   include_tasks: config.yml
   vars:

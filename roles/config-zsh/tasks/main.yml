@@ -57,6 +57,14 @@
       fi
       unset rc
 
+- name: Run .profile.d exports role
+  include_role:
+    name: config-sh-exports
+  vars:
+    sh_shell: zsh
+    sh_exports: "{{ config_zsh_exports }}"
+  when: config_zsh_exports is defined
+
 - name: Run .zprofile config roles
   include_tasks: config.yml
   vars:
