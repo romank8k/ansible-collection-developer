@@ -1,0 +1,6 @@
+---
+
+- name: Configure starship.sh
+  template:
+    src: starship.sh.j2
+    dest: "{{ ansible_user_dir }}/{{ user_sh_rc_dir }}/starship.sh"

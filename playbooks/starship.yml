@@ -1,0 +1,15 @@
+---
+
+- import_playbook: setup.yml
+
+- hosts: default
+  environment:
+    PATH: "{{ path | default(ansible_env.PATH) }}"
+  pre_tasks:
+    - name: Install Homebrew formula
+      community.general.homebrew:
+        name: starship
+        path: "{{ homebrew_prefix }}/bin"
+  roles:
+    - role: config-starship
+      tags: config-starship
