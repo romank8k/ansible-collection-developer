@@ -10,6 +10,12 @@
     path: "{{ ansible_user_dir }}/{{ user_sh_rc_dir }}"
     state: directory
 
+- name: Delete {{ user_sh_profile_dir }} directory
+  file:
+    path: "{{ ansible_user_dir }}/{{ user_sh_profile_dir }}"
+    state: absent
+  when: initialize | bool
+
 - name: Create {{ user_sh_profile_dir }} directory
   file:
     path: "{{ ansible_user_dir }}/{{ user_sh_profile_dir }}"
