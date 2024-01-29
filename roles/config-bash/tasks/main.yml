@@ -57,7 +57,7 @@
 - name: Make sure ~/.bashrc loads user-managed scripts
   blockinfile:
     path: "{{ ansible_user_dir }}/.bashrc"
-    marker: "# {mark} USER SPECIFIC ALIASES AND FUNCTIONS"
+    marker: "# {mark} USER MANAGED ALIASES AND FUNCTIONS"
     create: yes
     block: |
       if [ -d ~/{{ user_sh_rc_dir }} ]; then

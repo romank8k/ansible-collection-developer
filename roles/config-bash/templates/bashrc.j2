@@ -14,13 +14,5 @@ PROMPT_COMMAND='history -a'
 # Start Ansible Managed Blocks
 # End Ansible Managed Blocks
 
-# BEGIN USER SPECIFIC ALIASES AND FUNCTIONS
-if [ -d ~/{{ user_sh_rc_dir }} ]; then
-    for rc in ~/{{ user_sh_rc_dir }}/*; do
-        if [ -f "$rc" ]; then
-            source "$rc"
-        fi
-    done
-fi
-unset rc
-# END USER SPECIFIC ALIASES AND FUNCTIONS
+# BEGIN USER MANAGED ALIASES AND FUNCTIONS
+# END USER MANAGED ALIASES AND FUNCTIONS
