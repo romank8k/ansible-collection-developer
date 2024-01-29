@@ -39,10 +39,10 @@
     dest: "{{ ansible_user_dir }}/.zshrc"
   when: initialize | bool
 
-- name: Make sure ~/.zprofile loads user-managed scripts
+- name: Make sure ~/.zprofile loads user-managed exports
   blockinfile:
     path: "{{ ansible_user_dir }}/.zprofile"
-    marker: "# {mark} USER SPECIFIC ALIASES AND FUNCTIONS"
+    marker: "# {mark} USER MANAGED EXPORTS"
     create: yes
     block: |
       if [ -d ~/{{ user_sh_profile_dir }} ]; then

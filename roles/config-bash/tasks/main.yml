@@ -39,10 +39,10 @@
     dest: "{{ ansible_user_dir }}/.bashrc"
   when: initialize | bool
 
-- name: Make sure ~/.bash_profile loads user-managed scripts
+- name: Make sure ~/.bash_profile loads user-managed exports
   blockinfile:
     path: "{{ ansible_user_dir }}/.bash_profile"
-    marker: "# {mark} USER SPECIFIC ALIASES AND FUNCTIONS"
+    marker: "# {mark} USER MANAGED EXPORTS"
     create: yes
     block: |
       if [ -d ~/{{ user_sh_profile_dir }} ]; then
