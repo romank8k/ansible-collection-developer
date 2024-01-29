@@ -5,6 +5,12 @@
     user_sh_profile_dir: .profile.d
     user_sh_rc_dir: .bashrc.d
 
+- name: Delete {{ user_sh_rc_dir }} directory
+  file:
+    path: "{{ ansible_user_dir }}/{{ user_sh_rc_dir }}"
+    state: absent
+  when: initialize | bool
+
 - name: Create {{ user_sh_rc_dir }} directory
   file:
     path: "{{ ansible_user_dir }}/{{ user_sh_rc_dir }}"
