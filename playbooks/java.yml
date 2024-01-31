@@ -1,0 +1,31 @@
+---
+
+- import_playbook: setup.yml
+
+- hosts: default
+  environment:
+    PATH: "{{ path | default(ansible_env.PATH) }}"
+  pre_tasks:
+    - name: Tap cask-versions repository
+      community.general.homebrew_tap:
+        name: homebrew/cask-versions
+
+    - name: Install Homebrew casks
+      community.general.homebrew_cask:
+        name:
+          - temurin8
+          - temurin11
+          - temurin17
+        install_options: no-quarantine
+        path: "{{ homebrew_prefix }}/bin"
+
+    - name: Install Homebrew formulae
+      community.general.homebrew:
+        name:
+          - jenv
+          - maven
+          - maven-completion
+        path: "{{ homebrew_prefix }}/bin"
+  roles:
+    - role: config-jenv
+      tags: config-jenv

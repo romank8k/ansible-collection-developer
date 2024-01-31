@@ -1,0 +1,16 @@
+---
+
+- name: Configure nodenv.sh
+  template:
+    src: nodenv.sh.j2
+    dest: "{{ ansible_user_dir }}/{{ user_sh_rc_dir }}/nodenv.sh"
+
+- name: Initialize nodenv
+  shell: eval "$(nodenv init -)"
+  args:
+    executable: "{{ shell }}"
+
+- name: Use node system version
+  shell: nodenv global system
+  args:
+    executable: "{{ shell }}"

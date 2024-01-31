@@ -1,0 +1,28 @@
+---
+
+- name: Configure jenv.sh
+  template:
+    src: jenv.sh.j2
+    dest: "{{ ansible_user_dir }}/{{ user_sh_rc_dir }}/jenv.sh"
+
+- name: Register installed JVMs
+  shell: ls /Library/Java/JavaVirtualMachines
+  register: installed_jvms
+  changed_when: false
+
+- name: Initialize jenv and enable jenv to expose JAVA_HOME
+  shell: eval "$(jenv init -)" && jenv enable-plugin export
+  args:
+    executable: "{{ shell }}"
+
+- name: Configure jenv
+  shell: jenv add /Library/Java/JavaVirtualMachines/{{ item }}/Contents/Home
+  args:
+    executable: "{{ shell }}"
+  with_items: "{{ installed_jvms.stdout_lines }}"
+  ignore_errors: true
+
+- name: Set global Java version
+  shell: jenv global 1.8
+  args:
+    executable: "{{ shell }}"

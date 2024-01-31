@@ -1,0 +1,25 @@
+---
+
+- import_playbook: setup.yml
+
+- hosts: default
+  environment:
+    PATH: "{{ path | default(ansible_env.PATH) }}"
+  pre_tasks:
+    - name: Install Homebrew formulae
+      community.general.homebrew:
+        # Use the latest LTS release.
+        name:
+          - node@16
+          - nodenv
+        path: "{{ homebrew_prefix }}/bin"
+
+    # Alternate versions of formulae are key-only.
+    - name: Link Node.js
+      community.general.homebrew:
+        name: node@16
+        state: linked
+        path: "{{ homebrew_prefix }}/bin"
+  roles:
+    - role: config-nodenv
+      tags: config-nodenv

@@ -1,0 +1,41 @@
+---
+
+- import_playbook: setup.yml
+
+- hosts: default
+  environment:
+    PATH: "{{ path | default(ansible_env.PATH) }}"
+  pre_tasks:
+    # https://github.com/pyenv/pyenv/wiki#suggested-build-environment
+    - name: Install Homebrew formulae
+      community.general.homebrew:
+        name:
+          - pyenv
+          - bzip2
+          - libffi
+          - libxml2
+          - libxmlsec1
+          - openssl
+          - readline
+          - sqlite
+          - xz
+          - zlib
+          - tcl-tk
+        path: "{{ homebrew_prefix }}/bin"
+      when: "'ubuntu' in group_names"
+
+    - name: Install Homebrew formulae
+      community.general.homebrew:
+        name:
+          - pyenv
+          - openssl
+          - readline
+          - sqlite3
+          - xz
+          - zlib
+          - tcl-tk
+        path: "{{ homebrew_prefix }}/bin"
+      when: "'macos' in group_names"
+  roles:
+    - role: config-pyenv
+      tags: config-pyenv
