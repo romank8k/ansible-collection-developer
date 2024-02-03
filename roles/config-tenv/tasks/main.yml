@@ -1,0 +1,11 @@
+---
+
+- name: Install Terraform version
+  shell: tenv tf install {{ terraform_version }}
+  args:
+    executable: "{{ shell }}"
+
+- name: Install Terragrunt version
+  shell: tenv tg install {{ terragrunt_version }}
+  args:
+    executable: "{{ shell }}"

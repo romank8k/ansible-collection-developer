@@ -1,0 +1,41 @@
+---
+
+- import_playbook: setup.yml
+
+- hosts: default
+  environment:
+    PATH: "{{ path | default(ansible_env.PATH) }}"
+  pre_tasks:
+    - name: Unlink Homebrew terraform formula (if installed)
+      community.general.homebrew:
+        state: unlinked
+        name: terraform
+        path: "{{ homebrew_prefix }}/bin"
+      ignore_errors: true
+
+    - name: Unlink Homebrew terragrunt formula (if installed)
+      community.general.homebrew:
+        state: unlinked
+        name: terragrunt
+        path: "{{ homebrew_prefix }}/bin"
+      ignore_errors: true
+
+    - name: Tap tofuutils repository
+      community.general.homebrew_tap:
+        name: tofuutils/tap
+
+    - name: Install Homebrew formula
+      community.general.homebrew:
+        name: tenv
+        path: "{{ homebrew_prefix }}/bin"
+
+    # In case terraform or terragrunt was previously installed,
+    # make sure tenv is linked.
+    - name: Link Homebrew formula
+      community.general.homebrew:
+        state: linked
+        name: tenv
+        path: "{{ homebrew_prefix }}/bin"
+  roles:
+    - role: config-tenv
+      tags: config-tenv
