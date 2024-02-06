@@ -8,5 +8,3 @@ homebrew_user: "{{ ansible_user_id }}"
 homebrew_group: "admin"
 
 brew_git_repo: "https://github.com/Homebrew/brew"
-
-clt_placeholder_file: "/tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress"
