@@ -1,6 +1,6 @@
 ---
 
-homebrew_prefix: "/usr/local"
+homebrew_prefix: "{{ (ansible_machine == 'arm64') | ternary('/opt/homebrew', '/usr/local') }}"
 homebrew_repo_dir: "{{ homebrew_prefix }}/Homebrew"
 homebrew_cache_dir: "{{ ansible_env.HOME }}/Library/Caches/Homebrew"
 
