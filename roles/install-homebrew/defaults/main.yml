@@ -1,0 +1,12 @@
+---
+
+homebrew_prefix: "/usr/local"
+homebrew_repo_dir: "{{ homebrew_prefix }}/Homebrew"
+homebrew_cache_dir: "{{ ansible_env.HOME }}/Library/Caches/Homebrew"
+
+homebrew_user: "{{ ansible_user_id }}"
+homebrew_group: "admin"
+
+brew_git_repo: "https://github.com/Homebrew/brew"
+
+clt_placeholder_file: "/tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress"

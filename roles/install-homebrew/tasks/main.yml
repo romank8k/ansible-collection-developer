@@ -1,0 +1,117 @@
+---
+
+- name: Create directories
+  file:
+    path: "{{ homebrew_prefix }}/{{ item }}"
+    state: directory
+    owner: "{{ homebrew_user }}"
+    group: "{{ homebrew_group }}"
+    mode: 0775
+  become: true
+  with_items:
+    - Caskroom
+    - Cellar
+    - Frameworks
+    - bin
+    - etc
+    - include
+    - lib
+    - opt
+    - sbin
+    - share
+    - var
+
+- name: Create Homebrew directory
+  file:
+    path: "{{ homebrew_prefix }}/Homebrew"
+    state: directory
+    owner: "{{ homebrew_user }}"
+    group: "{{ homebrew_group }}"
+    mode: 0755
+  become: true
+
+- name: Create cache directory
+  file:
+    path: "{{ homebrew_cache_dir }}"
+    state: directory
+    owner: "{{ homebrew_user }}"
+    group: "{{ homebrew_group }}"
+    mode: 0775
+  become: true
+
+# Make sure this directory has the correct permissions.
+# If another program creates this first (looking at you Parallels Tools), it could munge the permissions.
+# This causes the 'brew services' command to error out.
+- name: Create user LaunchAgents directory
+  file:
+    path: "{{ ansible_env.HOME }}/Library/LaunchAgents"
+    state: directory
+    owner: "{{ homebrew_user }}"
+    group: "{{ homebrew_group }}"
+    mode: 0755
+  become: true
+
+- name: Register whether the Command Line Tools have been installed
+  shell: /usr/bin/xcode-select -print-path 2>/dev/null
+  register: clt_installed
+  become: true
+  ignore_errors: true
+  changed_when: false
+
+- block:
+  - name: Touch temporary file, {{ clt_placeholder_file }}, that enables the 'softwareupdate' utility to list the Command Line Tools
+    file:
+      path: "{{ clt_placeholder_file }}"
+      state: touch
+
+  - name: Search for latest version of Command Line Tools
+    shell: >-
+      softwareupdate -l |
+      grep -E '^\* Label: Command Line Tools' |
+      sed 's/^\* Label: //' |
+      tail -n 1
+    register: clt_version
+
+  - name: Install Command Line Tools - {{ clt_version.stdout }}
+    command: /usr/sbin/softwareupdate -i '{{ clt_version.stdout }}'
+
+  - name: Set active developer directory
+    command: /usr/bin/xcode-select --switch /Library/Developer/CommandLineTools
+
+  always:
+    - name: Remove temporary file
+      file:
+        path: "{{ clt_placeholder_file }}"
+        state: absent
+  become: true
+  when: clt_installed.stdout == ""
+
+- name: Clone {{ brew_git_repo }}
+  git:
+    repo: "{{ brew_git_repo }}"
+    dest: "{{ homebrew_repo_dir }}"
+    version: master
+    update: no
+
+- name: Check for existing brew symlink
+  stat:
+    path: "{{ homebrew_prefix }}/bin/brew"
+  register: homebrew_symlink
+
+- name: Link brew binary
+  file:
+    src: "{{ homebrew_repo_dir }}/bin/brew"
+    dest: "{{ homebrew_prefix }}/bin/brew"
+    state: link
+  when: homebrew_symlink.stat.exists == false
+
+- name: Run brew update to complete installation
+  command: "{{ homebrew_prefix }}/bin/brew update --force"
+  environment:
+    HOMEBREW_NO_ANALYTICS_THIS_RUN: "1"
+    HOMEBREW_NO_ANALYTICS_MESSAGE_OUTPUT: "1"
+  when: homebrew_symlink.stat.exists == false
+
+- name: Turn off analytics
+  command: "{{ homebrew_prefix }}/bin/brew analytics off"
+  when: homebrew_symlink.stat.exists == false

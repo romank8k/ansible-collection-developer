@@ -1,0 +1,10 @@
+---
+
+- import_playbook: setup.yml
+
+- hosts: default
+  environment:
+    PATH: "{{ path | default(ansible_env.PATH) }}"
+  roles:
+    - role: install-homebrew
+      tags: install-homebrew
