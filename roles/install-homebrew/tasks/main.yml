@@ -39,18 +39,6 @@
     mode: 0775
   become: true
 
-# Make sure this directory has the correct permissions.
-# If another program creates this first (looking at you Parallels Tools), it could munge the permissions.
-# This causes the 'brew services' command to error out.
-- name: Create user LaunchAgents directory
-  file:
-    path: "{{ ansible_env.HOME }}/Library/LaunchAgents"
-    state: directory
-    owner: "{{ homebrew_user }}"
-    group: "{{ homebrew_group }}"
-    mode: 0755
-  become: true
-
 - name: Clone {{ brew_git_repo }}
   git:
     repo: "{{ brew_git_repo }}"
