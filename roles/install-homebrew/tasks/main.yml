@@ -34,10 +34,6 @@
   file:
     path: "{{ homebrew_cache_dir }}"
     state: directory
-    owner: "{{ homebrew_user }}"
-    group: "{{ homebrew_group }}"
-    mode: 0775
-  become: true
 
 - name: Clone {{ brew_git_repo }}
   git:
