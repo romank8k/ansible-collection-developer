@@ -6,7 +6,7 @@
     state: directory
     owner: "{{ homebrew_user }}"
     group: "{{ homebrew_group }}"
-    mode: 0775
+    mode: "{{ homebrew_mode }}"
   become: true
   with_items:
     - Caskroom
@@ -27,7 +27,7 @@
     state: directory
     owner: "{{ homebrew_user }}"
     group: "{{ homebrew_group }}"
-    mode: 0755
+    mode: "{{ homebrew_mode }}"
   become: true
 
 - name: Create Homebrew cache
