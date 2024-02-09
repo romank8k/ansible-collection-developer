@@ -21,9 +21,9 @@
     - share
     - var
 
-- name: Create Homebrew repository
+- name: Create Homebrew directory
   file:
-    path: "{{ homebrew_repository }}"
+    path: "{{ homebrew_directory }}"
     state: directory
     owner: "{{ homebrew_user }}"
     group: "{{ homebrew_group }}"
@@ -37,17 +37,17 @@
 
 - name: Clone Homebrew repository
   git:
-    repo: "{{ brew_git_repo }}"
-    dest: "{{ homebrew_repository }}"
+    repo: "{{ homebrew_repository }}"
+    dest: "{{ homebrew_directory }}"
     version: master
     update: no
 
 - name: Link brew binary
   file:
-    src: "{{ homebrew_repository }}/bin/brew"
+    src: "{{ homebrew_directory }}/bin/brew"
     dest: "{{ homebrew_prefix }}/bin/brew"
     state: link
-  when: homebrew_repository != homebrew_prefix
+  when: homebrew_directory != homebrew_prefix
 
 - name: Run brew update to complete installation
   command: "{{ homebrew_prefix }}/bin/brew update --force"
