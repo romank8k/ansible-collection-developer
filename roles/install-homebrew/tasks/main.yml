@@ -1,6 +1,22 @@
 ---
 
-- name: Create Homebrew directories
+- name: Create Homebrew directory
+  file:
+    path: "{{ homebrew_directory }}"
+    state: directory
+    owner: "{{ homebrew_user }}"
+    group: "{{ homebrew_group }}"
+    mode: "{{ homebrew_mode }}"
+  become: true
+
+- name: Clone Homebrew repository
+  git:
+    repo: "{{ homebrew_repository }}"
+    dest: "{{ homebrew_directory }}"
+    version: master
+    update: no
+
+- name: Create required Homebrew directories
   file:
     path: "{{ homebrew_prefix }}/{{ item }}"
     state: directory
@@ -21,26 +37,10 @@
     - share
     - var
 
-- name: Create Homebrew directory
-  file:
-    path: "{{ homebrew_directory }}"
-    state: directory
-    owner: "{{ homebrew_user }}"
-    group: "{{ homebrew_group }}"
-    mode: "{{ homebrew_mode }}"
-  become: true
-
 - name: Create Homebrew cache
   file:
     path: "{{ homebrew_cache }}"
     state: directory
-
-- name: Clone Homebrew repository
-  git:
-    repo: "{{ homebrew_repository }}"
-    dest: "{{ homebrew_directory }}"
-    version: master
-    update: no
 
 - name: Link brew binary
   file:
