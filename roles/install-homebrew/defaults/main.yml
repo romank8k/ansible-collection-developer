@@ -2,7 +2,6 @@
 
 homebrew_prefix: "{{ (ansible_machine == 'arm64') | ternary('/opt/homebrew', '/usr/local') }}"
 homebrew_directory: "{{ homebrew_prefix }}{{ '/Homebrew' if ansible_machine != 'arm64' }}"
-homebrew_cache: "{{ ansible_env.HOME }}/Library/Caches/Homebrew"
 
 homebrew_user: "{{ ansible_user_id }}"
 homebrew_group: "{{ ansible_user_gid }}"

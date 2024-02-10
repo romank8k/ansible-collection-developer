@@ -15,6 +15,8 @@
     dest: "{{ homebrew_directory }}"
     version: master
     update: no
+  become: "{{ (homebrew_user != ansible_user_id) | bool }}"
+  become_user: "{{ homebrew_user }}"
 
 - name: Create required Homebrew directories
   file:
@@ -37,23 +39,33 @@
     - share
     - var
 
-- name: Create Homebrew cache
-  file:
-    path: "{{ homebrew_cache }}"
-    state: directory
+- name: Install Homebrew for given user
+  block:
+    - name: Locate the Homebrew cache
+      command: "{{ homebrew_directory }}/bin/brew --cache"
+      register: homebrew_cache
+      changed_when: false
+      check_mode: false
 
-- name: Link brew binary
-  file:
-    src: "{{ homebrew_directory }}/bin/brew"
-    dest: "{{ homebrew_prefix }}/bin/brew"
-    state: link
-  when: homebrew_directory != homebrew_prefix
+    - name: Create Homebrew cache
+      file:
+        path: "{{ homebrew_cache.stdout | trim }}"
+        state: directory
 
-- name: Run brew update to complete installation
-  command: "{{ homebrew_prefix }}/bin/brew update --force"
-  environment:
-    HOMEBREW_NO_ANALYTICS_THIS_RUN: "1"
-    HOMEBREW_NO_ANALYTICS_MESSAGE_OUTPUT: "1"
+    - name: Link brew binary
+      file:
+        src: "{{ homebrew_directory }}/bin/brew"
+        dest: "{{ homebrew_prefix }}/bin/brew"
+        state: link
+      when: homebrew_directory != homebrew_prefix
 
-- name: Turn off analytics
-  command: "{{ homebrew_prefix }}/bin/brew analytics off"
+    - name: Run brew update to complete installation
+      command: "{{ homebrew_prefix }}/bin/brew update --force"
+      environment:
+        HOMEBREW_NO_ANALYTICS_THIS_RUN: "1"
+        HOMEBREW_NO_ANALYTICS_MESSAGE_OUTPUT: "1"
+
+    - name: Turn off analytics
+      command: "{{ homebrew_prefix }}/bin/brew analytics off"
+  become: "{{ (homebrew_user != ansible_user_id) | bool }}"
+  become_user: "{{ homebrew_user }}"
