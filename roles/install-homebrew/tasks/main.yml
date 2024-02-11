@@ -1,11 +1,33 @@
 ---
 
+- name: Get Homebrew user's uid
+  command: id -u
+  register: r_homebrew_user_uid
+  changed_when: false
+  become: "{{ (homebrew_user != ansible_user_id) | bool }}"
+  become_user: "{{ homebrew_user }}"
+
+- name: Set Homebrew user's uid
+  set_fact:
+    homebrew_user_uid: "{{ r_homebrew_user_uid.stdout }}"
+
+- name: Get Homebrew user's gid
+  command: id -g
+  register: r_homebrew_user_gid
+  changed_when: false
+  become: "{{ (homebrew_user != ansible_user_id) | bool }}"
+  become_user: "{{ homebrew_user }}"
+
+- name: Set Homebrew user's gid
+  set_fact:
+    homebrew_user_gid: "{{ r_homebrew_user_gid.stdout }}"
+
 - name: Create Homebrew directory
   file:
     path: "{{ homebrew_directory }}"
     state: directory
-    owner: "{{ homebrew_user }}"
-    group: "{{ homebrew_group }}"
+    owner: "{{ homebrew_user_uid }}"
+    group: "{{ homebrew_user_gid }}"
     mode: "{{ homebrew_mode }}"
   become: true
 
@@ -22,10 +44,9 @@
   file:
     path: "{{ homebrew_prefix }}/{{ item }}"
     state: directory
-    owner: "{{ homebrew_user }}"
-    group: "{{ homebrew_group }}"
+    owner: "{{ homebrew_user_uid }}"
+    group: "{{ homebrew_user_gid }}"
     mode: "{{ homebrew_mode }}"
-  become: true
   with_items:
     - Caskroom
     - Cellar
@@ -38,6 +59,7 @@
     - sbin
     - share
     - var
+  become: true
 
 - name: Install Homebrew for given user
   block:
