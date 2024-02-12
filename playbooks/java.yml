@@ -13,7 +13,7 @@
     - name: Install Homebrew casks
       community.general.homebrew_cask:
         name:
-          - temurin8
+          - corretto8
           - temurin11
           - temurin17
         install_options: no-quarantine
