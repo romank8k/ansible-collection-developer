@@ -1,0 +1,12 @@
+---
+
+- name: Add Homebrew {{ sh_config_file }} config
+  blockinfile:
+    path: "{{ ansible_user_dir }}/{{ sh_config_file }}"
+    marker: "# {mark} HOMEBREW BLOCK"
+    insertbefore: BOF
+    block: |
+      if [[ -x "{{ homebrew_prefix }}/bin/brew" ]]; then
+        eval "$({{ homebrew_prefix }}/bin/brew shellenv)"
+      fi
+  when: not homebrew_prefix.startswith('/usr/local')
