@@ -6,7 +6,7 @@
   environment:
     PATH: "{{ path | default(ansible_env.PATH) }}"
   roles:
-    - role: rkhmelichek.ssh-keys
+    - role: ssh-keys
       ssh_keys: "{{ my_ssh_keys }}"
       tags: ssh-keys
     - role: config-ssh
