@@ -8,7 +8,7 @@ DOCUMENTATION = r'''
         plugin:
             description: Plugin name
             required: true
-            choices: ['rkhmelichek.developer.localhost']
+            choices: ['romank8k.developer.localhost']
 '''
 
 import os
