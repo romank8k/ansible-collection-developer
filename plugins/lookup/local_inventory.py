@@ -26,9 +26,9 @@ class LookupModule(LookupBase):
     def run(self, terms, variables, **kwargs):
         inventory = InventoryManager(loader=DataLoader(), sources=variables['inventory_file'])
 
-        return {
+        return [{
             'all': self._serialize_group(inventory.groups, inventory.groups['all'])
-        }
+        }]
 
     def _serialize_group(self, inventory_groups, curr_group):
         group = {}
