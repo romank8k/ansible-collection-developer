@@ -8,4 +8,4 @@
 - name: Copy local ansible inventory
   ansible.builtin.copy:
     content: "{{ lookup('romank8k.developer.local_inventory') | to_nice_yaml(indent=2) }}"
-    dest: "{{ ansible_user_dir }}/.ansible/inventory/local.yml"
+    dest: "{{ ansible_user_dir }}/.ansible/inventory/{{ local_inventory_name }}"
