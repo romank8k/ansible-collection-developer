@@ -10,6 +10,7 @@
       command: /usr/bin/printenv SHELL
       register: user_shell
       changed_when: false
+      check_mode: false
     - name: Get user's SHELL
       set_fact:
         shell: "{{ user_shell.stdout }}"
@@ -28,6 +29,7 @@
       command: /usr/bin/env -i HOME="$HOME" {{ shell }} -l -c '/usr/bin/printenv PATH'
       register: user_path
       changed_when: false
+      check_mode: false
     - name: Get user's PATH
       set_fact:
         path: "{{ user_path.stdout }}"
