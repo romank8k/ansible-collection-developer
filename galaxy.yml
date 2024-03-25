@@ -21,4 +21,6 @@ documentation: https://github.com/romank8k/ansible-collection-developer
 homepage: https://github.com/romank8k/ansible-collection-developer
 issues: https://github.com/romank8k/ansible-collection-developer/issues
 
-build_ignore: []
+build_ignore:
+  - .gitignore
+  - .idea
