@@ -1,4 +1,4 @@
 ---
 
 dependencies:
-  - require-python-module-pexpect
+  - require_python_module_pexpect
