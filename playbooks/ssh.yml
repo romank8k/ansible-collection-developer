@@ -8,7 +8,7 @@
   roles:
     - role: ssh_keys
       ssh_keys: "{{ my_ssh_keys }}"
-      tags: ssh-keys
+      tags: ssh_keys
     - role: config_ssh
       configs: "{{ config_ssh }}"
-      tags: config-ssh
+      tags: config_ssh

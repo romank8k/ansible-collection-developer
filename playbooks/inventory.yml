@@ -3,4 +3,4 @@
 - hosts: default
   roles:
     - role: local_inventory
-      tags: local-inventory
+      tags: local_inventory

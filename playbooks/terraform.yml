@@ -38,4 +38,4 @@
         path: "{{ homebrew_prefix }}/bin"
   roles:
     - role: config_tenv
-      tags: config-tenv
+      tags: config_tenv

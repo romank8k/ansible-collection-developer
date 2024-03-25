@@ -38,4 +38,4 @@
       when: "'macos' in group_names"
   roles:
     - role: config_pyenv
-      tags: config-pyenv
+      tags: config_pyenv

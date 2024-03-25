@@ -32,4 +32,4 @@
         - /usr/local/share/zsh/site-functions
   roles:
     - role: config_zsh
-      tags: config-zsh
+      tags: config_zsh

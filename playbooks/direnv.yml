@@ -12,4 +12,4 @@
         path: "{{ homebrew_prefix }}/bin"
   roles:
     - role: config_direnv
-      tags: config-direnv
+      tags: config_direnv

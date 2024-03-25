@@ -7,4 +7,4 @@
     PATH: "{{ path | default(ansible_env.PATH) }}"
   roles:
     - role: config_shell
-      tags: config-shell
+      tags: config_shell

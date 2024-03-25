@@ -32,4 +32,4 @@
       become: true
   roles:
     - role: config_bash
-      tags: config-bash
+      tags: config_bash

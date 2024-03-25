@@ -28,4 +28,4 @@
         path: "{{ homebrew_prefix }}/bin"
   roles:
     - role: config_jenv
-      tags: config-jenv
+      tags: config_jenv
