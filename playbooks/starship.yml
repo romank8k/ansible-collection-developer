@@ -11,5 +11,5 @@
         name: starship
         path: "{{ homebrew_prefix }}/bin"
   roles:
-    - role: config-starship
+    - role: config_starship
       tags: config-starship

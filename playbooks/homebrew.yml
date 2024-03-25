@@ -6,5 +6,5 @@
   environment:
     PATH: "{{ path | default(ansible_env.PATH) }}"
   roles:
-    - role: install-homebrew
+    - role: install_homebrew
       tags: install-homebrew

@@ -31,5 +31,5 @@
       command: chsh -s {{ homebrew_prefix }}/bin/bash {{ ansible_env.USER }}
       become: true
   roles:
-    - role: config-bash
+    - role: config_bash
       tags: config-bash

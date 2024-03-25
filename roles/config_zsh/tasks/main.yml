@@ -71,7 +71,7 @@
 
 - name: Run .profile.d exports role
   include_role:
-    name: config-sh-exports
+    name: config_sh_exports
   vars:
     sh_shell: zsh
     sh_exports: "{{ config_zsh_exports }}"

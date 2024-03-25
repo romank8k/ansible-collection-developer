@@ -2,5 +2,5 @@
 
 - hosts: default
   roles:
-    - role: local-inventory
+    - role: local_inventory
       tags: local-inventory

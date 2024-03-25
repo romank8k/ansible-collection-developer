@@ -27,5 +27,5 @@
           - maven-completion
         path: "{{ homebrew_prefix }}/bin"
   roles:
-    - role: config-jenv
+    - role: config_jenv
       tags: config-jenv

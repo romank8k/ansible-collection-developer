@@ -13,5 +13,5 @@
           - nodenv
         path: "{{ homebrew_prefix }}/bin"
   roles:
-    - role: config-nodenv
+    - role: config_nodenv
       tags: config-nodenv

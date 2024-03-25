@@ -31,5 +31,5 @@
         - /usr/local/share/zsh
         - /usr/local/share/zsh/site-functions
   roles:
-    - role: config-zsh
+    - role: config_zsh
       tags: config-zsh

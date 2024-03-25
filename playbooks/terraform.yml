@@ -37,5 +37,5 @@
         name: tenv
         path: "{{ homebrew_prefix }}/bin"
   roles:
-    - role: config-tenv
+    - role: config_tenv
       tags: config-tenv
