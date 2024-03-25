@@ -14,7 +14,7 @@ license:
 tags: []
 
 dependencies:
-  community.general:
+  community.general: ">=8.4.0"
 
 repository: https://github.com/romank8k/ansible-collection-developer
 documentation: https://github.com/romank8k/ansible-collection-developer
