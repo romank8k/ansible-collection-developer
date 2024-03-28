@@ -3,3 +3,6 @@
 profile: min
 
 offline: true
+
+skip_list:
+  - fqcn[action-core]
