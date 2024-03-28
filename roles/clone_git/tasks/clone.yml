@@ -26,8 +26,8 @@
     repo: "{{ repository.url }}"
     dest: "{{ repository_root }}/{{ repository.name }}"
     version: "{{ repository.version | default(omit) }}"
-    accept_hostkey: yes
-    update: no
+    accept_hostkey: true
+    update: false
   environment:
     SSH_AUTH_SOCK: "{{ ssh_auth_sock | default('') }}"
 

@@ -1,0 +1,6 @@
+---
+
+rules:
+  octal-values:
+    forbid-implicit-octal: false
+    forbid-explicit-octal: false

@@ -36,7 +36,7 @@
     repo: "{{ homebrew_repository }}"
     dest: "{{ homebrew_directory }}"
     version: master
-    update: no
+    update: false
   become: "{{ (homebrew_user != ansible_user_id) | bool }}"
   become_user: "{{ homebrew_user }}"
 

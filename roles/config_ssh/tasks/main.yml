@@ -21,7 +21,7 @@
   lineinfile:
     path: "{{ ansible_user_dir }}/.ssh/config"
     insertbefore: BOF
-    create: yes
+    create: true
     line: Include config.d/*
 
 - name: Run ssh configs

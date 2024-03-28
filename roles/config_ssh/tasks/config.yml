@@ -12,7 +12,7 @@
     path: "{{ ansible_user_dir }}/.ssh/{{ ssh_config_path }}"
     marker: "# {mark} {{ config.block_marker_qualifier | default('DEFAULT') }} HOSTS BLOCK"
     insertafter: EOF
-    create: yes
+    create: true
     block: |
       {% for cfg in config.stanzas %}
       {% if cfg.comment | default(false) %}
