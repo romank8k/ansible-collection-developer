@@ -85,7 +85,7 @@
   with_items: "{{ config_bash_profile_roles }}"
   loop_control:
     loop_var: config
-  when: initialize | bool and config_bash_profile_roles is defined
+  when: config_bash_profile_roles is defined
 
 - name: Run .bashrc config roles
   include_tasks: config.yml
@@ -95,4 +95,4 @@
   with_items: "{{ config_bash_rc_roles }}"
   loop_control:
     loop_var: config
-  when: initialize | bool and config_bash_rc_roles is defined
+  when: config_bash_rc_roles is defined

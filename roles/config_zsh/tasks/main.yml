@@ -85,7 +85,7 @@
   with_items: "{{ config_zsh_profile_roles }}"
   loop_control:
     loop_var: config
-  when: initialize | bool and config_zsh_profile_roles is defined
+  when: config_zsh_profile_roles is defined
 
 - name: Run .zshrc config roles
   include_tasks: config.yml
@@ -95,4 +95,4 @@
   with_items: "{{ config_zsh_rc_roles }}"
   loop_control:
     loop_var: config
-  when: initialize | bool and config_zsh_rc_roles is defined
+  when: config_zsh_rc_roles is defined
