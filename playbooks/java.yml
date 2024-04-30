@@ -13,9 +13,9 @@
     - name: Install Homebrew casks
       community.general.homebrew_cask:
         name:
-          - corretto8
-          - temurin11
-          - temurin17
+          - corretto@8
+          - temurin@11
+          - temurin@17
         install_options: no-quarantine
         path: "{{ homebrew_prefix }}/bin"
 
