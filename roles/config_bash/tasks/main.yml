@@ -43,6 +43,7 @@
   blockinfile:
     path: "{{ ansible_user_dir }}/.bash_profile"
     marker: "# {mark} USER MANAGED EXPORTS"
+    insertbefore: BOF
     create: true
     block: |
       if [ -d ~/{{ user_sh_profile_dir }} ]; then
@@ -58,6 +59,7 @@
   blockinfile:
     path: "{{ ansible_user_dir }}/.bashrc"
     marker: "# {mark} USER MANAGED ALIASES AND FUNCTIONS"
+    insertbefore: BOF
     create: true
     block: |
       if [ -d ~/{{ user_sh_rc_dir }} ]; then
