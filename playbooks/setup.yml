@@ -34,10 +34,17 @@
       set_fact:
         path: "{{ user_path.stdout }}"
 
+    # Due to https://github.com/ansible/ansible/issues/82535 we cannot set ansible_python_interpreter to `/usr/bin/env python3` anymore.
+    - name: Get user's python executable
+      command: which python3
+      register: user_python
+      changed_when: false
+      check_mode: false
+
     # Local connections set the interpreter to the same one used by the Ansible controller via the localhost inventory plugin.
     # For remote connections, find the python interpreter from our PATH (playbooks should use the normalized PATH above).
     - name: Set ansible_python_interpreter
       set_fact:
-        ansible_python_interpreter: "/usr/bin/env python3"
+        ansible_python_interpreter: "{{ user_python.stdout }}"
       when: ansible_connection != 'local'
   tags: always
