@@ -6,10 +6,6 @@
   environment:
     PATH: "{{ path | default(ansible_env.PATH) }}"
   pre_tasks:
-    - name: Tap cask-versions repository
-      community.general.homebrew_tap:
-        name: homebrew/cask-versions
-
     - name: Install Homebrew casks
       community.general.homebrew_cask:
         name:
