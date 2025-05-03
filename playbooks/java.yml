@@ -12,6 +12,7 @@
           - corretto@8
           - temurin@11
           - temurin@17
+          - temurin@21
         install_options: no-quarantine
         path: "{{ homebrew_prefix }}/bin"
 
