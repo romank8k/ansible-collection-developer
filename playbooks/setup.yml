@@ -28,7 +28,7 @@
     #   but they inherit unwanted PATH modifications (e.g. made through virtual environments and `~/.bashrc` (or `~/.zshrc`)).
     #   To resolve this, we clear any inherited env vars prior to creating a new login shell.
     - name: Get user's PATH
-      command: /usr/bin/env -i HOME="$HOME" {{ shell }} -l -c '/usr/bin/printenv PATH'
+      command: /usr/bin/env -i HOME='{{ ansible_user_dir }}' {{ shell }} -l -c '/usr/bin/printenv PATH'
       register: user_path
       changed_when: false
       check_mode: false
