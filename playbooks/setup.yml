@@ -7,14 +7,16 @@
     - ansible.builtin.debug: var=setup
 
     - name: Get user's SHELL
-      command: /usr/bin/printenv SHELL
-      register: user_shell
-      changed_when: false
-      check_mode: false
+      user:
+        name: "{{ ansible_user_id }}"
+        state: present
+      register: user_info
+      check_mode: true
+      when: shell is not defined
     - name: Get user's SHELL
       set_fact:
-        shell: "{{ user_shell.stdout }}"
-        shell_name: "{{ user_shell.stdout | split('/') | last }}"
+        shell: "{{ shell | default(user_info.shell | default('/bin/sh')) }}"
+        shell_name: "{{ shell | default(user_info.shell | default('/bin/sh')) | split('/') | last }}"
 
     # Normalize the PATH for predictable playbook runs across local and ssh connections.
     # * For ssh connections:
