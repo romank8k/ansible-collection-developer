@@ -3,7 +3,7 @@
 homebrew_prefix: "{{ (ansible_machine == 'arm64') | ternary('/opt/homebrew', '/usr/local') }}"
 homebrew_directory: "{{ homebrew_prefix }}{{ '/Homebrew' if ansible_machine != 'arm64' }}"
 
-homebrew_user: "{{ ansible_user_id }}"
+homebrew_user: "{{ ansible_facts['user_id'] }}"
 homebrew_mode: "0755"
 
 homebrew_repository: "https://github.com/Homebrew/brew"

@@ -4,7 +4,7 @@
   command: id -u
   register: r_homebrew_user_uid
   changed_when: false
-  become: "{{ (homebrew_user != ansible_user_id) | bool }}"
+  become: "{{ (homebrew_user != ansible_facts['user_id']) | bool }}"
   become_user: "{{ homebrew_user }}"
 
 - name: Set Homebrew user's uid
@@ -15,7 +15,7 @@
   command: id -g
   register: r_homebrew_user_gid
   changed_when: false
-  become: "{{ (homebrew_user != ansible_user_id) | bool }}"
+  become: "{{ (homebrew_user != ansible_facts['user_id']) | bool }}"
   become_user: "{{ homebrew_user }}"
 
 - name: Set Homebrew user's gid
@@ -37,7 +37,7 @@
     dest: "{{ homebrew_directory }}"
     version: master
     update: false
-  become: "{{ (homebrew_user != ansible_user_id) | bool }}"
+  become: "{{ (homebrew_user != ansible_facts['user_id']) | bool }}"
   become_user: "{{ homebrew_user }}"
 
 - name: Create required Homebrew directories
@@ -89,5 +89,5 @@
 
     - name: Turn off analytics
       command: "{{ homebrew_prefix }}/bin/brew analytics off"
-  become: "{{ (homebrew_user != ansible_user_id) | bool }}"
+  become: "{{ (homebrew_user != ansible_facts['user_id']) | bool }}"
   become_user: "{{ homebrew_user }}"
