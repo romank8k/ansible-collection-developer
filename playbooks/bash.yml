@@ -27,8 +27,8 @@
         line: "{{ homebrew_prefix }}/bin/bash"
       become: true
 
-    - name: Change system shell for user ({{ ansible_env.USER }})
-      command: chsh -s {{ homebrew_prefix }}/bin/bash {{ ansible_env.USER }}
+    - name: Change system shell for user ({{ ansible_facts['env']['USER'] }})
+      command: chsh -s {{ homebrew_prefix }}/bin/bash {{ ansible_facts['env']['USER'] }}
       become: true
   roles:
     - role: config_bash

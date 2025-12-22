@@ -17,8 +17,8 @@
         line: "{{ homebrew_prefix }}/bin/zsh"
       become: true
 
-    - name: Change system shell for user ({{ ansible_env.USER }})
-      command: chsh -s {{ homebrew_prefix }}/bin/zsh {{ ansible_env.USER }}
+    - name: Change system shell for user ({{ ansible_facts['env']['USER'] }})
+      command: chsh -s {{ homebrew_prefix }}/bin/zsh {{ ansible_facts['env']['USER'] }}
       become: true
 
     # Fix the following warning caused by group-writeable completion directories.
