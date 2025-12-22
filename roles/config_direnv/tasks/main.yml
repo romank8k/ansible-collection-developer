@@ -3,4 +3,4 @@
 - name: Configure direnv.sh
   template:
     src: direnv.sh.j2
-    dest: "{{ ansible_user_dir }}/{{ user_sh_rc_dir }}/direnv.sh"
+    dest: "{{ ansible_facts['user_dir'] }}/{{ user_sh_rc_dir }}/direnv.sh"

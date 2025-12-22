@@ -9,7 +9,7 @@
 
 - name: Add ssh configs
   blockinfile:
-    path: "{{ ansible_user_dir }}/.ssh/{{ ssh_config_path }}"
+    path: "{{ ansible_facts['user_dir'] }}/.ssh/{{ ssh_config_path }}"
     marker: "# {mark} {{ config.block_marker_qualifier | default('DEFAULT') }} HOSTS BLOCK"
     insertafter: EOF
     create: true

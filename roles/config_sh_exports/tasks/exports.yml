@@ -3,10 +3,10 @@
 - name: Empty {{ name }} exports
   template:
     src: exports.j2
-    dest: "{{ ansible_user_dir }}/.profile.d/{{ name }}.sh"
+    dest: "{{ ansible_facts['user_dir'] }}/.profile.d/{{ name }}.sh"
 
 - name: Add {{ name }} exports
   lineinfile:
-    path: "{{ ansible_user_dir }}/.profile.d/{{ name }}.sh"
+    path: "{{ ansible_facts['user_dir'] }}/.profile.d/{{ name }}.sh"
     line: "export {{ item.name }}={{ item.value }}"
   with_items: "{{ exports }}"

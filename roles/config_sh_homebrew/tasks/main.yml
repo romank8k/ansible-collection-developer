@@ -2,7 +2,7 @@
 
 - name: Add Homebrew {{ sh_config_file }} config
   blockinfile:
-    path: "{{ ansible_user_dir }}/{{ sh_config_file }}"
+    path: "{{ ansible_facts['user_dir'] }}/{{ sh_config_file }}"
     marker: "# {mark} HOMEBREW BLOCK"
     insertbefore: BOF
     block: |

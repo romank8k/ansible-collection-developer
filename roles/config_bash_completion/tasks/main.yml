@@ -2,7 +2,7 @@
 
 - name: Add bash completion .bashrc config
   blockinfile:
-    path: "{{ ansible_user_dir }}/.bashrc"
+    path: "{{ ansible_facts['user_dir'] }}/.bashrc"
     marker: "# {mark} BASH_COMPLETION BLOCK"
     insertafter: "# Start Ansible Managed Blocks"
     block: |

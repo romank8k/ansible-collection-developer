@@ -7,41 +7,41 @@
 
 - name: Delete {{ user_sh_rc_dir }} directory
   file:
-    path: "{{ ansible_user_dir }}/{{ user_sh_rc_dir }}"
+    path: "{{ ansible_facts['user_dir'] }}/{{ user_sh_rc_dir }}"
     state: absent
   when: initialize | bool
 
 - name: Create {{ user_sh_rc_dir }} directory
   file:
-    path: "{{ ansible_user_dir }}/{{ user_sh_rc_dir }}"
+    path: "{{ ansible_facts['user_dir'] }}/{{ user_sh_rc_dir }}"
     state: directory
 
 - name: Delete {{ user_sh_profile_dir }} directory
   file:
-    path: "{{ ansible_user_dir }}/{{ user_sh_profile_dir }}"
+    path: "{{ ansible_facts['user_dir'] }}/{{ user_sh_profile_dir }}"
     state: absent
   when: initialize | bool
 
 - name: Create {{ user_sh_profile_dir }} directory
   file:
-    path: "{{ ansible_user_dir }}/{{ user_sh_profile_dir }}"
+    path: "{{ ansible_facts['user_dir'] }}/{{ user_sh_profile_dir }}"
     state: directory
 
 - name: Initialize ~/.zprofile
   template:
     src: zprofile.j2
-    dest: "{{ ansible_user_dir }}/.zprofile"
+    dest: "{{ ansible_facts['user_dir'] }}/.zprofile"
   when: initialize | bool
 
 - name: Initialize ~/.zshrc
   template:
     src: zshrc.j2
-    dest: "{{ ansible_user_dir }}/.zshrc"
+    dest: "{{ ansible_facts['user_dir'] }}/.zshrc"
   when: initialize | bool
 
 - name: Make sure ~/.zprofile loads user-managed exports
   blockinfile:
-    path: "{{ ansible_user_dir }}/.zprofile"
+    path: "{{ ansible_facts['user_dir'] }}/.zprofile"
     marker: "# {mark} USER MANAGED EXPORTS"
     insertbefore: BOF
     create: true
@@ -57,7 +57,7 @@
 
 - name: Make sure ~/.zshrc loads user-managed scripts
   blockinfile:
-    path: "{{ ansible_user_dir }}/.zshrc"
+    path: "{{ ansible_facts['user_dir'] }}/.zshrc"
     marker: "# {mark} USER MANAGED ALIASES AND FUNCTIONS"
     insertbefore: BOF
     create: true

@@ -2,7 +2,7 @@
 
 - name: Add zsh completion .zshrc config
   blockinfile:
-    path: "{{ ansible_user_dir }}/.zshrc"
+    path: "{{ ansible_facts['user_dir'] }}/.zshrc"
     marker: "# {mark} ZSH_COMPLETION BLOCK"
     insertafter: "# Start Ansible Managed Blocks"
     block: |

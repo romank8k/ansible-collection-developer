@@ -2,24 +2,24 @@
 
 - name: Create SSH directory
   file:
-    path: "{{ ansible_user_dir }}/.ssh"
+    path: "{{ ansible_facts['user_dir'] }}/.ssh"
     state: directory
     mode: 0700
 
 - name: Create SSH config.d directory
   file:
-    path: "{{ ansible_user_dir }}/.ssh/config.d"
+    path: "{{ ansible_facts['user_dir'] }}/.ssh/config.d"
     state: directory
 
 - name: Configure ~/.ssh/config
   template:
     src: config.j2
-    dest: "{{ ansible_user_dir }}/.ssh/config"
+    dest: "{{ ansible_facts['user_dir'] }}/.ssh/config"
   when: initialize | bool
 
 - name: Make sure ~/.ssh/config includes config.d directory
   lineinfile:
-    path: "{{ ansible_user_dir }}/.ssh/config"
+    path: "{{ ansible_facts['user_dir'] }}/.ssh/config"
     insertbefore: BOF
     create: true
     line: Include config.d/*
