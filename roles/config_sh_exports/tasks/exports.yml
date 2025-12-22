@@ -1,12 +1,12 @@
 ---
 
-- name: Empty {{ name }} exports
+- name: Empty {{ config.name }} exports
   template:
     src: exports.j2
-    dest: "{{ ansible_facts['user_dir'] }}/.profile.d/{{ name }}.sh"
+    dest: "{{ ansible_facts['user_dir'] }}/.profile.d/{{ config.name }}.sh"
 
-- name: Add {{ name }} exports
+- name: Add {{ config.name }} exports
   lineinfile:
-    path: "{{ ansible_facts['user_dir'] }}/.profile.d/{{ name }}.sh"
+    path: "{{ ansible_facts['user_dir'] }}/.profile.d/{{ config.name }}.sh"
     line: "export {{ item.name }}={{ item.value }}"
-  with_items: "{{ exports }}"
+  with_items: "{{ config.exports }}"
