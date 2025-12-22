@@ -4,7 +4,7 @@
 
 - hosts: default
   environment:
-    PATH: "{{ path | default(ansible_env.PATH) }}"
+    PATH: "{{ path | default(ansible_facts['env']['PATH']) }}"
   pre_tasks:
     # https://github.com/pyenv/pyenv/wiki#suggested-build-environment
     - name: Install Homebrew formulae

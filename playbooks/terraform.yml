@@ -4,7 +4,7 @@
 
 - hosts: default
   environment:
-    PATH: "{{ path | default(ansible_env.PATH) }}"
+    PATH: "{{ path | default(ansible_facts['env']['PATH']) }}"
   pre_tasks:
     - name: Unlink Homebrew terraform formula (if installed)
       community.general.homebrew:
