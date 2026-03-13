@@ -1,0 +1,27 @@
+---
+
+- name: Create Vim plugin directory
+  file:
+    path: "{{ ansible_facts['user_dir'] }}/.vim/bundle"
+    state: directory
+    recurse: true
+
+- name: Clone Vundle Git repository
+  git:
+    repo: https://github.com/VundleVim/Vundle.vim.git
+    dest: "{{ ansible_facts['user_dir'] }}/.vim/bundle/Vundle.vim"
+
+- name: Configure ~/.vimrc
+  template:
+    src: vimrc.j2
+    dest: "{{ ansible_facts['user_dir'] }}/.vimrc"
+
+# -E: start in EX mode
+# -s: silent mode
+# -c: execute command
+# We need to source ~/.vimrc in order to load the PluginInstall command.
+# For whatever reason, this command returns an error code, but the plugins are installed fine.
+- name: Install plugins via Vundle
+  command: vim -E -s -c "source ~/.vimrc" -c PluginInstall -c qa
+  ignore_errors: true
+  changed_when: false

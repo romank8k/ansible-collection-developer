@@ -1,0 +1,50 @@
+set nocompatible
+filetype off
+
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+Plugin 'VundleVim/Vundle.vim'
+
+" Vundle managed plugins
+Plugin 'tpope/vim-sensible'
+Plugin 'scrooloose/nerdtree'
+
+call vundle#end()
+filetype plugin indent on
+
+" Enable Powerline
+set rtp+={{ powerline_python_site_packages_dir }}/powerline/bindings/vim
+python3 << EOF
+try:
+    from powerline.vim import setup as powerline_setup
+    powerline_setup()
+    del powerline_setup
+except ImportError:
+    pass
+EOF
+
+" Powerline settings
+set laststatus=2
+set showtabline=2
+set noshowmode
+
+" Use a ligature-enabled font when using a GUI
+if has("gui_running")
+  set macligatures
+  set guifont=Fira\ Code:h14
+endif
+
+" NERDTree settings
+map <C-n> :NERDTreeToggle<CR>
+
+" Custom settings
+set expandtab
+set shiftwidth=2
+set tabstop=4
+
+set visualbell
+
+set nobackup
+set nowritebackup
+set noswapfile
