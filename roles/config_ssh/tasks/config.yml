@@ -22,14 +22,14 @@
       Host {{ cfg.Host }}
       {# Indent configs within a Host stanza. #}
       {% for key, value in cfg.items() %}
-      {% if key != 'comment' and key != 'Host' and (key != 'UseKeychain' or ansible_distribution == 'MacOSX') %}
+      {% if key != 'comment' and key != 'Host' and (key != 'UseKeychain' or ansible_facts['distribution'] == 'MacOSX') %}
           {{ key }} {{ value }}
       {% endif %}
       {% endfor %}
       {% else %}
       {# Configs without a Host stanza. #}
       {% for key, value in cfg.items() %}
-      {% if key != 'comment' and (key != 'UseKeychain' or ansible_distribution == 'MacOSX') %}
+      {% if key != 'comment' and (key != 'UseKeychain' or ansible_facts['distribution'] == 'MacOSX') %}
       {{ key }} {{ value }}
       {% endif %}
       {% endfor %}
