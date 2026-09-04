@@ -7,6 +7,7 @@
     mode: 0600
   vars:
     ssh_private_key: "{{ key.private }}"
+  when: key.private is defined
 
 - name: Configure SSH public key - {{ key.name }}
   template:
@@ -15,3 +16,4 @@
     mode: 0644
   vars:
     ssh_public_key: "{{ key.public }}"
+  when: key.public is defined
